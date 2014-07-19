@@ -8284,9 +8284,14 @@ void clif_refresh_storagewindow(struct map_session_data *sd)
 			// Shouldn't happen... The information should already be at the map-server
 			intif->request_guild_storage(sd->status.account_id,sd->status.guild_id);
 		} else {
+			if( !sd->guild ) {
+				ShowWarning("clif_refreshstoragewindow: Trying to open guild storage without guild information! (AID: %d, GID: %d)\n",
+					sd->status.account_id, sd->status.guild_id );
+				return;
+			}
 			storage->sortitem(gstor->items, ARRAYLENGTH(gstor->items));
 			clif->storagelist(sd, gstor->items, ARRAYLENGTH(gstor->items));
-			clif->updatestorageamount(sd, gstor->storage_amount, MAX_GUILD_STORAGE);
+			clif->updatestorageamount(sd, gstor->storage_amount, sd->guild->max_storage);
 		}
 	}
 }
@@ -12718,9 +12723,9 @@ void clif_parse_GuildChangePositionInfo(int fd, struct map_session_data *sd)
 	if(!sd->state.gmaster_flag)
 		return;
 
-	for(i = 4; i < RFIFOW(fd,2); i += 40 ){
+	for(i = 4; i < RFIFOW(fd,2); i += 40 )
 		guild->change_position(sd->status.guild_id, RFIFOL(fd,i), RFIFOL(fd,i+4), RFIFOL(fd,i+12), (char*)RFIFOP(fd,i+16));
-	}
+
 }
 
 void clif_parse_GuildChangeMemberPosition(int fd, struct map_session_data *sd) __attribute__((nonnull (2)));
