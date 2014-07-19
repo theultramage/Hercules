@@ -24,7 +24,7 @@
 #include "common/db.h"
 #include "common/mmo.h"
 
-enum {
+enum guild_save_types {
 	GS_BASIC = 0x0001,
 	GS_MEMBER = 0x0002,
 	GS_POSITION = 0x0004,
