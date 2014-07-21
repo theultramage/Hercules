@@ -237,7 +237,7 @@ int inter_guild_tosql( struct guild *g, int flag ) {
 			else //last condition using add_coma setting
 				add_comma = true;
 #endif // 0
-			StrBuf->Printf(&buf, "`guild_lv`=%d, `skill_point`=%d, `exp`=%"PRIu64", `next_exp`=%u, `max_member`=%d, `max_storage`=%d",
+			StrBuf->Printf(&buf, "`guild_lv`=%d, `skill_point`=%d, `exp`=%"PRIu64", `next_exp`=%u, `max_member`=%d, `max_storage`=%hu",
 				g->guild_lv, g->skill_point, g->exp, g->next_exp, g->max_member, g->max_storage);
 		}
 		StrBuf->Printf(&buf, " WHERE `guild_id`=%d", g->guild_id);
@@ -861,10 +861,12 @@ int inter_guild_calcinfo(struct guild *g)
 
 	// Save next exp step
 	g->next_exp = nextexp;
-
 	// Set the max storage size
+#if PACKETVER >= 20140205
 	g->max_storage = inter_guild->checkskill(g, GD_GUILD_STORAGE)*100;
-
+#else
+	g->max_storage = MAX_GUILD_STORAGE;
+#endif
 	// Set the max number of members, Guild Extension skill - currently adds 6 to max per skill lv.
 	g->max_member = BASE_GUILD_SIZE + inter_guild->checkskill(g, GD_EXTENSION) * 6;
 	if(g->max_member > MAX_GUILD)
@@ -1232,7 +1234,9 @@ int mapif_parse_CreateGuild(int fd,int account_id,char *name,struct guild_member
 	g->average_lv = master->lv;
 	g->connect_member = 1;
 	g->guild_lv = 1;
-#if PACKETVER < 20140205
+#if PACKETVER >= 20140205
+	g->max_storage = 0;
+#else
 	g->max_storage = MAX_GUILD_STORAGE;
 #endif
 

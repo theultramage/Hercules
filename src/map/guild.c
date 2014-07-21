@@ -1125,7 +1125,7 @@ bool guild_change_position(int guild_id,int idx,int mode,int exp_mode,const char
 	nullpo_ret(name);
 
 	exp_mode = cap_value(exp_mode, 0, battle_config.guild_exp_limit);
-	p.mode = mode&GPERM_BASE;
+	p.mode = mode&GPERM_ALL;
 	p.exp_mode=exp_mode;
 	safestrncpy(p.name,name,NAME_LENGTH);
 	return intif->guild_position(guild_id,idx,&p);
@@ -1378,12 +1378,10 @@ int guild_skillupack(int guild_id,uint16 skill_id,int account_id) {
 			case GD_HAWKEYES:
 				guild->aura_refresh(sd,skill_id,g->skill[skill_id-GD_SKILLBASE].lv);
 				break;
-#if PACKETVER >= 20140205
 			// Guild storage handling
 			case GD_GUILD_STORAGE:
 				gstorage->grow(g);
 				break;
-#endif
 		}
 	}
 

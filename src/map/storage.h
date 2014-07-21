@@ -27,6 +27,7 @@
 #include "map/guild.h"
 
 struct guild_storage;
+struct guild;
 struct item;
 struct map_session_data;
 
