@@ -458,7 +458,7 @@ int intif_send_guild_storage(int account_id,struct guild_storage *gs) {
 	if( intif->CheckForCharServer() )
 		return 0;
 
-	nullpo_ret(gstor);
+	nullpo_ret(gs);
 	size = (gs->items)?(14 + (sizeof(struct item)*gs->storage_amount) ):14;
 
 	WFIFOHEAD(inter_fd, size);

@@ -862,7 +862,7 @@ int inter_guild_calcinfo(struct guild *g)
 	// Save next exp step
 	g->next_exp = nextexp;
 	// Set the max storage size
-#if PACKETVER >= 20140205
+#if PACKETVER >= 20131223
 	g->max_storage = inter_guild->checkskill(g, GD_GUILD_STORAGE)*100;
 #else
 	g->max_storage = MAX_GUILD_STORAGE;
@@ -1234,7 +1234,7 @@ int mapif_parse_CreateGuild(int fd,int account_id,char *name,struct guild_member
 	g->average_lv = master->lv;
 	g->connect_member = 1;
 	g->guild_lv = 1;
-#if PACKETVER >= 20140205
+#if PACKETVER >= 20131223
 	g->max_storage = 0;
 #else
 	g->max_storage = MAX_GUILD_STORAGE;
